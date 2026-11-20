@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEHLUM IT CENTRE | Online Result Portal</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#eef4ff,#f7fbff);color:#172033}
+.container{max-width:900px;margin:0 auto;padding:28px 16px 50px}
+.header{background:linear-gradient(135deg,#092b57,#0b5aa7);color:white;border-radius:18px;padding:28px 22px;text-align:center;box-shadow:0 10px 30px rgba(9,43,87,.18)}
+.header h1{margin:0;font-size:28px;letter-spacing:.4px} .header p{margin:8px 0 0;opacity:.92}
+.search{background:white;margin:20px 0;padding:18px;border-radius:16px;box-shadow:0 5px 22px rgba(20,50,90,.09);display:flex;gap:10px}
+input{flex:1;padding:14px 15px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;text-transform:uppercase;outline:none}
+input:focus{border-color:#0b5aa7;box-shadow:0 0 0 3px rgba(11,90,167,.1)}
+button{border:0;border-radius:10px;padding:13px 18px;font-weight:700;cursor:pointer;background:#0b5aa7;color:#fff}
+button.secondary{background:#eef4fb;color:#092b57;border:1px solid #cbd8e8}
+.result{display:none;background:white;border-radius:16px;box-shadow:0 5px 22px rgba(20,50,90,.09);overflow:hidden}
+.result.show{display:block} .result-head{padding:20px 22px;background:#f1f6fc;border-bottom:1px solid #dbe5ef}
+.result-head h2{margin:0 0 5px;font-size:22px} .meta{color:#52657d;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:20px}
+.card{border:1px solid #e1e8f0;border-radius:12px;padding:14px;background:#fff}
+.label{font-size:12px;color:#66778c;text-transform:uppercase;letter-spacing:.5px} .value{font-size:17px;font-weight:700;margin-top:5px}
+.marks{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mark{padding:16px;border-radius:12px;background:#f7f9fc;text-align:center;border:1px solid #e6edf5}
+.mark strong{display:block;font-size:22px;color:#092b57} .mark span{font-size:12px;color:#66778c}
+.status{grid-column:1/-1;padding:15px;border-radius:12px;text-align:center;font-weight:800;font-size:18px}
+.pass{background:#e9f8ef;color:#16733d} .fail{background:#fff0f0;color:#a11d1d}
+.actions{display:flex;gap:10px;padding:0 20px 20px;flex-wrap:wrap}
+.error{display:none;background:#fff0f0;color:#a11d1d;border:1px solid #f2c5c5;padding:15px;border-radius:12px;margin-top:15px;font-weight:600}
+.footer{text-align:center;color:#68788d;font-size:12px;margin-top:22px}
+@media(max-width:600px){.search{flex-direction:column}.grid{grid-template-columns:1fr}.marks{grid-template-columns:1fr}.marks,.status{grid-column:auto}.header h1{font-size:23px}}
+@media print{body{background:#fff}.container{max-width:100%;padding:0}.header,.search,.footer,.actions{display:none!important}.result{display:block!important;box-shadow:none;border:1px solid #ccc}}
+
+/* Premium JITC visual identity */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:
+radial-gradient(circle at 15% 15%,rgba(11,90,167,.10),transparent 28%),
+radial-gradient(circle at 85% 80%,rgba(13,148,136,.08),transparent 30%);z-index:-1}
+.header{position:relative;overflow:hidden;padding:24px 22px 26px;border:1px solid rgba(255,255,255,.15)}
+.header:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:-80px;top:-100px}
+.brand{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:15px}
+.logo-mark{width:68px;height:76px;display:flex;align-items:center;justify-content:center}
+.logo-shield{width:58px;height:68px;clip-path:polygon(50% 0,92% 14%,87% 68%,50% 100%,13% 68%,8% 14%);
+background:linear-gradient(145deg,#ffffff,#dbeafe);color:#092b57;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,.22)}
+.logo-shield span{font-weight:900;font-size:16px;letter-spacing:1px}
+.logo-shield small{font-size:7px;font-weight:800;letter-spacing:.7px;margin-top:3px}
+.brand-text{text-align:left}
+.brand-name{font-size:22px;font-weight:900;letter-spacing:1px}
+.brand-sub{font-size:10px;font-weight:700;letter-spacing:2px;opacity:.85;margin-top:3px}
+.portal-title{display:inline-block;margin-top:2px;padding:8px 15px;border:1px solid rgba(255,255,255,.25);border-radius:999px;background:rgba(255,255,255,.09);font-size:12px;font-weight:800;letter-spacing:1.6px}
+.header p{font-size:13px}
+.search{border:1px solid #dce7f2}
+.search:before{content:"🔎";font-size:20px;display:flex;align-items:center}
+input{font-weight:600;letter-spacing:.4px}
+button{transition:.18s ease;box-shadow:0 5px 12px rgba(11,90,167,.16)}
+button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(11,90,167,.22)}
+.result-head{position:relative}
+.result-head:before{content:"RESULT VERIFIED";position:absolute;right:20px;top:20px;font-size:10px;font-weight:900;letter-spacing:1px;color:#16733d;background:#e9f8ef;border:1px solid #ccebd8;border-radius:999px;padding:6px 9px}
+.card,.mark{transition:.15s ease}
+.card:hover,.mark:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(20,50,90,.07)}
+.footer{padding-top:4px}
+@media(max-width:600px){
+ .brand-name{font-size:18px}.brand-sub{font-size:8px}.logo-mark{width:58px}
+ .result-head:before{position:static;display:inline-block;margin-top:10px}
+}
+
+
+:root{--navy:#082b57;--blue:#0b5aa7;--cyan:#00a8cc;--gold:#f5b942;--green:#159957;--red:#d64545;--ink:#172033}
+body{background:linear-gradient(120deg,#eef7ff 0%,#f8fbff 48%,#eefaf7 100%);color:var(--ink)}
+.header{background:linear-gradient(125deg,#061f40 0%,#0b5aa7 52%,#087f8c 100%);border-radius:22px;padding:25px 22px 30px;box-shadow:0 18px 45px rgba(8,43,87,.22)}
+.header:before{content:"";position:absolute;inset:auto -80px -120px auto;width:300px;height:300px;border-radius:50%;border:42px solid rgba(255,255,255,.06)}
+.brand{position:relative;z-index:1}
+.logo-shield{background:linear-gradient(145deg,#fff,#e7f7ff);border:3px solid rgba(245,185,66,.7);box-shadow:0 0 0 5px rgba(245,185,66,.08),0 10px 28px rgba(0,0,0,.25)}
+.logo-shield span{color:var(--navy)}
+.portal-title{background:linear-gradient(90deg,rgba(245,185,66,.18),rgba(255,255,255,.10));border-color:rgba(245,185,66,.45);color:#fff}
+.search{border:0;background:rgba(255,255,255,.92);box-shadow:0 14px 35px rgba(8,43,87,.13);padding:20px}
+.search:before{content:"";width:5px;height:36px;border-radius:5px;background:linear-gradient(#f5b942,#0b5aa7)}
+input{border:2px solid #dbe7f3;background:#fbfdff}
+button{background:linear-gradient(135deg,#0b5aa7,#087f8c);border:1px solid rgba(255,255,255,.2)}
+.result{border:0;box-shadow:0 16px 40px rgba(8,43,87,.13)}
+.result-head{background:linear-gradient(110deg,#f4f9ff,#eefcfb);padding:24px}
+.result-head h2{color:var(--navy);font-size:24px}
+.grid{padding:24px}
+.card{background:linear-gradient(145deg,#fff,#f8fbff);border:1px solid #e0eaf4;border-radius:15px}
+.marks{gap:14px}
+.mark{background:linear-gradient(145deg,#f7fbff,#eef8ff);border:1px solid #d9e8f5;position:relative;overflow:hidden}
+.mark:nth-child(1){border-top:4px solid #0b5aa7}
+.mark:nth-child(2){border-top:4px solid #00a8cc}
+.mark:nth-child(3){border-top:4px solid #f5b942}
+.mark strong{color:var(--navy)}
+.status{border-radius:15px;letter-spacing:1px}
+.actions button:first-child{background:linear-gradient(135deg,#159957,#0d7b49)}
+.actions button:nth-child(2){background:linear-gradient(135deg,#f5b942,#e09b19);color:#18212f}
+.actions button:nth-child(3){background:linear-gradient(135deg,#0b5aa7,#087f8c)}
+.download-note{margin:0 24px 24px;padding:14px 16px;border-radius:14px;background:linear-gradient(90deg,#fff8e8,#eefcf8);border:1px solid #f1dfb1;color:#4b5666;font-size:13px}
+.card-title{font-size:11px;font-weight:900;color:#708197;letter-spacing:1px;text-transform:uppercase}
+.marks-card{display:none}
+@media(max-width:600px){.grid{padding:16px}.result-head{padding:20px}.download-note{margin:0 16px 18px}}
+@media print{
+ .header,.search,.footer,.actions,.download-note{display:none!important}
+ .result{display:block!important}
+ .marks-card{display:block!important}
+ .grid{display:none!important}
+ body{background:#fff}
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+<div class="brand">
+  <div class="logo-mark" aria-label="JITC logo">
+    <div class="logo-shield">
+      <span>JITC</span>
+      <small>EST. 2017</small>
+    </div>
+  </div>
+  <div class="brand-text">
+    <div class="brand-name">JEHLUM IT CENTRE</div>
+    <div class="brand-sub">KAMALKOTE • SULTAN DAKI</div>
+  </div>
+</div>
+
+    <div class="portal-title">ONLINE RESULT PORTAL</div>
+    <p>Examination Result Verification System</p>
+  </div>
+
+  <div class="search">
+    <input id="roll" placeholder="Enter Examination Roll No. e.g. JITCKK28" autocomplete="off">
+    <button onclick="searchResult()">Search Result</button>
+  </div>
+
+  <div id="error" class="error"></div>
+
+  <section id="result" class="result">
+    <div class="result-head">
+      <h2 id="studentName"></h2>
+      <div class="meta" id="studentMeta"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="label">Examination Roll No.</div><div class="value" id="rollOut"></div></div>
+      <div class="card"><div class="label">Centre</div><div class="value" id="centreOut"></div></div>
+      <div class="card"><div class="label">Batch</div><div class="value" id="batchOut"></div></div>
+      <div class="card"><div class="label">Gender</div><div class="value" id="genderOut"></div></div>
+
+      <div class="marks">
+        <div class="mark"><strong id="theoryOut"></strong><span>Theory / 150</span></div>
+        <div class="mark"><strong id="practicalOut"></strong><span>Practical / 50</span></div>
+        <div class="mark"><strong id="totalOut"></strong><span>Total / 200</span></div>
+      </div>
+
+      <div class="card"><div class="label">Percentage</div><div class="value" id="pctOut"></div></div>
+      <div class="card"><div class="label">Grade</div><div class="value" id="gradeOut"></div></div>
+      <div id="status" class="status"></div>
+      <div class="card" style="grid-column:1/-1"><div class="label">Remarks</div><div class="value" id="remarksOut"></div></div>
+    </div>
+
+    <div class="marks-card" id="marksCard">
+      <div style="padding:28px;border:2px solid #0b5aa7;border-radius:18px;background:#fff">
+        <div style="text-align:center;border-bottom:2px solid #e6edf5;padding-bottom:16px;margin-bottom:18px">
+          <div style="font-size:25px;font-weight:900;color:#082b57">JEHLUM IT CENTRE</div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:2px;color:#0b5aa7">OFFICIAL MARKS CARD • BASIC COMPUTER COURSE</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+          <div><b>Student:</b> <span id="mcName"></span></div>
+          <div><b>Roll No.:</b> <span id="mcRoll"></span></div>
+          <div><b>Centre:</b> <span id="mcCentre"></span></div>
+          <div><b>Batch:</b> <span id="mcBatch"></span></div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-top:20px;font-size:13px">
+          <tr><th style="text-align:left;padding:10px;border:1px solid #dbe5ef;background:#eef6ff">Component</th>
+              <th style="padding:10px;border:1px solid #dbe5ef;background:#eef6ff">Maximum</th>
+              <th style="padding:10px;border:1px solid #dbe5ef;background:#eef6ff">Obtained</th></tr>
+          <tr><td style="padding:10px;border:1px solid #dbe5ef">Theory</td><td style="text-align:center;border:1px solid #dbe5ef">150</td><td id="mcTheory" style="text-align:center;border:1px solid #dbe5ef"></td></tr>
+          <tr><td style="padding:10px;border:1px solid #dbe5ef">Practical</td><td style="text-align:center;border:1px solid #dbe5ef">50</td><td id="mcPractical" style="text-align:center;border:1px solid #dbe5ef"></td></tr>
+          <tr><td style="padding:10px;border:1px solid #dbe5ef;font-weight:900">TOTAL</td><td style="text-align:center;border:1px solid #dbe5ef;font-weight:900">200</td><td id="mcTotal" style="text-align:center;border:1px solid #dbe5ef;font-weight:900"></td></tr>
+        </table>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px;text-align:center;font-size:12px">
+          <div style="padding:10px;border:1px solid #dbe5ef;border-radius:10px"><b>Percentage</b><br><span id="mcPct"></span></div>
+          <div style="padding:10px;border:1px solid #dbe5ef;border-radius:10px"><b>Grade</b><br><span id="mcGrade"></span></div>
+          <div style="padding:10px;border:1px solid #dbe5ef;border-radius:10px"><b>Result</b><br><span id="mcResult"></span></div>
+          <div style="padding:10px;border:1px solid #dbe5ef;border-radius:10px"><b>Remarks</b><br><span id="mcRemarks"></span></div>
+        </div>
+        <div style="margin-top:24px;text-align:center;font-size:10px;color:#6b7788">Computer-generated marks card • JEHLUM IT CENTRE</div>
+      </div>
+    </div>
+
+    <div class="download-note">📄 <b>Marks Card:</b> Use <b>Download Marks Card</b> to save a student-friendly PDF/printable marks card.</div>
+    <div class="actions">
+      <button onclick="window.print()">🖨️ Print / Save PDF</button>
+      <button onclick="downloadMarksCard()">📄 Download Marks Card</button>
+      <button class="secondary" onclick="copyLink()">🔗 Copy Result Link</button>
+    </div>
+  </section>
+
+  <div class="footer">© 2026 JEHLUM IT CENTRE • Kamalkote & Sultan Daki • Official Result Verification Portal</div>
+</div>
+
+<script>
+const STUDENTS = [{"roll": "JITCKK28", "name": "SYED ATIF NAQVI", "gender": "M", "batch": "21", "centre": "Kamalkote", "theory": 102, "practical": 45, "total": 147, "pct": 73.5, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCKK29", "name": "SAIMA BANO", "gender": "F", "batch": "21", "centre": "Kamalkote", "theory": 134, "practical": 50, "total": 184, "pct": 92, "grade": "A+", "result": "P", "remarks": "Excellent"}, {"roll": "JITCKK30", "name": "RUKHSAR AHMED", "gender": "M", "batch": "21", "centre": "Kamalkote", "theory": 86, "practical": 40, "total": 126, "pct": 63, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCKK31", "name": "SUMIYA SHEIKH", "gender": "F", "batch": "21", "centre": "Kamalkote", "theory": 80, "practical": 35, "total": 115, "pct": 57, "grade": "C", "result": "P", "remarks": "Satisfactory"}, {"roll": "JITCKK33", "name": "KOUSAR HAMEED", "gender": "F", "batch": "21", "centre": "Kamalkote", "theory": 103, "practical": 45, "total": 148, "pct": 74, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCKK34", "name": "SEHRISH PARVEEN", "gender": "F", "batch": "21", "centre": "Kamalkote", "theory": 106, "practical": 45, "total": 151, "pct": 75.5, "grade": "A", "result": "P", "remarks": "Very Good"}, {"roll": "JITCKK35", "name": "IRAJ JAVID", "gender": "F", "batch": "21", "centre": "Kamalkote", "theory": 78, "practical": 40, "total": 118, "pct": 59, "grade": "C", "result": "P", "remarks": "Satisfactory"}, {"roll": "JITCKK37", "name": "ROZYA PARVEEN", "gender": "F", "batch": "21", "centre": "Kamalkote", "theory": 89, "practical": 35, "total": 124, "pct": 62, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCKK39", "name": "AMIR AHMAD", "gender": "M", "batch": "21", "centre": "Kamalkote", "theory": 96, "practical": 40, "total": 136, "pct": 68, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCKK40", "name": "MOHD RAHIL AWAB", "gender": "M", "batch": "21", "centre": "Kamalkote", "theory": 95, "practical": 35, "total": 130, "pct": 65, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCKK41", "name": "HAMZA NAHIEM", "gender": "M", "batch": "21", "centre": "Kamalkote", "theory": 75, "practical": 35, "total": 110, "pct": 55, "grade": "C", "result": "P", "remarks": "Satisfactory"}, {"roll": "JITCKK42", "name": "YASMEEN BANO", "gender": "F", "batch": "21", "centre": "Kamalkote", "theory": 116, "practical": 35, "total": 151, "pct": 75.5, "grade": "A", "result": "P", "remarks": "Very Good"}, {"roll": "JITCKK43", "name": "FAIZAN HUSSAIN", "gender": "M", "batch": "21", "centre": "Kamalkote", "theory": 70, "practical": 35, "total": 105, "pct": 52.5, "grade": "C", "result": "P", "remarks": "Satisfactory"}, {"roll": "JITCSD01", "name": "ABDUL BASIT MANGRAL", "gender": "M", "batch": "02", "centre": "Sultan Daki", "theory": 96, "practical": 45, "total": 141, "pct": 70.5, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCSD02", "name": "WAQAS SAFEER", "gender": "M", "batch": "01", "centre": "Sultan Daki", "theory": 94.5, "practical": 40, "total": 134.5, "pct": 67.25, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCSD03", "name": "MOHAMMAD SAAD", "gender": "M", "batch": "02", "centre": "Sultan Daki", "theory": 98, "practical": 45, "total": 143, "pct": 71.5, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCSD04", "name": "ZAID RUKHSAR", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 37, "practical": 35, "total": 72, "pct": 36, "grade": "F", "result": "F", "remarks": "Not Qualify"}, {"roll": "JITCSD06", "name": "IMRAN KHAN", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 115, "practical": 38, "total": 153, "pct": 76.5, "grade": "A", "result": "P", "remarks": "Very Good"}, {"roll": "JITCSD08", "name": "IDREES AHMED AWAN", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 106, "practical": 44, "total": 150, "pct": 75, "grade": "A", "result": "P", "remarks": "Very Good"}, {"roll": "JITCSD10", "name": "RIZWAN KHAN", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 101, "practical": 45, "total": 146, "pct": 73, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCSD11", "name": "AQIB YAMEEN MIR", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 120, "practical": 50, "total": 170, "pct": 85, "grade": "A+", "result": "P", "remarks": "Excellent"}, {"roll": "JITCSD12", "name": "SUFYIAN KHAN", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 92, "practical": 45, "total": 137, "pct": 68.5, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCSD13", "name": "IMAAD ALI QURESHI", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 90, "practical": 38, "total": 128, "pct": 64, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCSD14", "name": "AMBAR KHAN", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 120, "practical": 50, "total": 170, "pct": 85, "grade": "A+", "result": "P", "remarks": "Excellent"}, {"roll": "JITCSD15", "name": "ARZAN SHAFAYAT", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 97, "practical": 44, "total": 141, "pct": 70.5, "grade": "B", "result": "P", "remarks": "Good"}, {"roll": "JITCSD16", "name": "OBAID JAVID", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 126, "practical": 45, "total": 171, "pct": 85.5, "grade": "A+", "result": "P", "remarks": "Excellent"}, {"roll": "JITCSD17", "name": "UZAIR SHAFAYAT", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 95, "practical": 45, "total": 140, "pct": 70, "grade": "B", "result": "P", "remarks": "Excellent"}, {"roll": "JITCSD18", "name": "BASIT QURESHI", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 74, "practical": 35, "total": 109, "pct": 54.5, "grade": "C", "result": "P", "remarks": "Satisfactory"}, {"roll": "JITCSD20", "name": "UZAIR ZAHOOR", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 104, "practical": 46, "total": 150, "pct": 75, "grade": "A", "result": "P", "remarks": "Very Good"}, {"roll": "JITCSD21", "name": "YASIR AHMED MIR", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 74, "practical": 35, "total": 109, "pct": 54.5, "grade": "C", "result": "P", "remarks": "Satisfactory"}, {"roll": "JITCSD22", "name": "UZAIR SHAFAYAT", "gender": "M", "batch": "—", "centre": "Sultan Daki", "theory": 89, "practical": 35, "total": 124, "pct": 62, "grade": "B", "result": "P", "remarks": "Good"}];
+
+function searchResult() {
+  const roll = document.getElementById('roll').value.trim().toUpperCase();
+  const result = document.getElementById('result');
+  const error = document.getElementById('error');
+  error.style.display='none';
+  result.classList.remove('show');
+  if(!roll) {
+    error.textContent='Please enter an Examination Roll Number.';
+    error.style.display='block';
+    return;
+  }
+  const s = STUDENTS.find(x => x.roll.toUpperCase() === roll);
+  if(!s) {
+    error.textContent='Result not found. Please check the Examination Roll Number and try again.';
+    error.style.display='block';
+    return;
+  }
+  document.getElementById('studentName').textContent=s.name;
+  document.getElementById('studentMeta').textContent=`${s.centre} • Batch ${s.batch}`;
+  document.getElementById('rollOut').textContent=s.roll;
+  document.getElementById('centreOut').textContent=s.centre;
+  document.getElementById('batchOut').textContent=s.batch;
+  document.getElementById('genderOut').textContent=s.gender;
+  document.getElementById('theoryOut').textContent=s.theory;
+  document.getElementById('practicalOut').textContent=s.practical;
+  document.getElementById('totalOut').textContent=s.total;
+  document.getElementById('pctOut').textContent=s.pct + '%';
+  document.getElementById('gradeOut').textContent=s.grade;
+  document.getElementById('remarksOut').textContent=s.remarks;
+  document.getElementById('mcName').textContent=s.name;
+  document.getElementById('mcRoll').textContent=s.roll;
+  document.getElementById('mcCentre').textContent=s.centre;
+  document.getElementById('mcBatch').textContent=s.batch;
+  document.getElementById('mcTheory').textContent=s.theory;
+  document.getElementById('mcPractical').textContent=s.practical;
+  document.getElementById('mcTotal').textContent=s.total;
+  document.getElementById('mcPct').textContent=s.pct + '%';
+  document.getElementById('mcGrade').textContent=s.grade;
+  document.getElementById('mcResult').textContent=s.result==='P' ? 'PASS' : 'FAIL';
+  document.getElementById('mcRemarks').textContent=s.remarks;
+
+  const status=document.getElementById('status');
+  status.textContent=s.result==='P' ? 'PASS' : 'FAIL';
+  status.className='status ' + (s.result==='P' ? 'pass' : 'fail');
+  result.classList.add('show');
+  history.replaceState(null,'',`${location.pathname}?roll=${encodeURIComponent(s.roll)}`);
+}
+
+function copyLink() {
+  const roll=document.getElementById('roll').value.trim().toUpperCase();
+  const url=`${location.origin}${location.pathname}?roll=${encodeURIComponent(roll)}`;
+  navigator.clipboard.writeText(url).then(()=>alert('Result link copied.')).catch(()=>prompt('Copy this result link:',url));
+}
+
+
+function downloadMarksCard(){
+  const roll=document.getElementById('roll').value.trim().toUpperCase();
+  const s=STUDENTS.find(x=>x.roll.toUpperCase()===roll);
+  if(!s){alert('Please search a valid roll number first.');return;}
+  // The marks card is styled for clean A4 printing; this opens the browser's
+  // Save as PDF dialog, which works on Android, Windows and other platforms.
+  window.print();
+}
+
+document.getElementById('roll').addEventListener('keydown',e=>{if(e.key==='Enter')searchResult();});
+const initial=new URLSearchParams(location.search).get('roll');
+if(initial){document.getElementById('roll').value=initial;searchResult();}
+</script>
+</body>
+</html>
